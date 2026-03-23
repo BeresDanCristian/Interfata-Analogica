@@ -1,4 +1,4 @@
-# Proiectarea unei Interfețe Analogice - SCIA 2025
+# Proiectarea unei Interfețe Analogice - SCIA 
 
 Acest proiect reprezintă implementarea și simularea unei interfețe analogice complexe, structurată pe patru etaje de procesare a semnalului, realizat pentru disciplina **Sisteme cu Circuite Integrate Analogice**.
 
