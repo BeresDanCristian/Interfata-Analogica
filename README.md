@@ -1,48 +1,46 @@
 # Interfata-Analogica
-# Proiectarea unei Interfețe Analogice - SCIA 
+# Proiectarea unei Interfețe Analogice - SCIA 2026
 
-Acest proiect reprezintă implementarea și simularea unei interfețe analogice complexe, structurată pe patru etaje de procesare a semnalului. [cite_start]Proiectul a fost realizat pentru disciplina **Sisteme cu Circuite Integrate Analogice (SCIA)** la Facultatea de Electronică, Telecomunicații și Tehnologia Informației din cadrul Universității Tehnice din Cluj-Napoca.
-
-## 📋 Tema Proiectului
-[cite_start]Obiectivul principal este proiectarea unui sistem analogic capabil să preia un semnal de intrare de nivel mic și să îl proceseze prin amplificare, filtrare, ajustare programabilă a câștigului și redresare de precizie[cite: 3].
+Acest proiect reprezintă implementarea și simularea unei interfețe analogice complexe, structurată pe patru etaje de procesare a semnalului, realizat pentru disciplina **Sisteme cu Circuite Integrate Analogice**.
 
 ## 🏗️ Arhitectura Sistemului
 
 Sistemul este compus din următoarele etaje corelate:
 
-### 1. Etajul de Amplificare (Amplificator neinversor)
-* [cite_start]**Rol:** Preluarea semnalului de intrare ($V_{in}$ max 147 mV) și amplificarea acestuia cu un factor liniar de 6[cite: 4, 6].
-* [cite_start]**Componente cheie:** Amplificator operațional LT1679[cite: 4].
-* [cite_start]**Funcționalități:** Include o rețea de compensare a tensiunii de offset (DC Offset) pentru calibrarea fină a punctului de funcționare[cite: 5, 10].
-* [cite_start]**Specificații:** Câștig teoretic calculat prin $Av = 1 + R_2/R_1$; valoarea $R_2$ a fost ajustată experimental la 60k pentru a compensa pierderile[cite: 7, 8].
+### 1. Amplificator de Intrare (Etajul 1)
+- **Tip:** Amplificator neinversor.
+- **Parametri:** Câștig liniar constant de **6**.
+- **Sursă semnal:** Amplitudine minimă 0.0734V / Amplitudine maximă 0.147V.
+- **Funcție:** Preluarea semnalului mic și aducerea lui la un nivel optim pentru filtrare.
 
-### 2. Etajul de Filtrare (Filtru Trece-Jos KHN)
-* [cite_start]**Topologie:** Kerwin-Huelsman-Newcomb (KHN), utilizând trei amplificatoare operaționale (un sumator și două integratoare)[cite: 12, 13].
-* [cite_start]**Parametri:** * Banda de frecvență: 7 kHz[cite: 14].
-    * [cite_start]Factor de calitate ($Q$): 0.707[cite: 14].
-    * [cite_start]Câștig în banda de trecere ($|H0|$): 1[cite: 14].
-* [cite_start]**Avantaj:** Stabilitate superioară și sensibilitate scăzută la variațiile componentelor[cite: 13].
+### 2. Filtru Activ (Etajul 2)
+- **Topologie:** Filtru Trece-Jos (LPF).
+- **Specificații:**
+  - Câștig în banda de trecere ($H_0$): 1.
+  - Frecvența de tăiere (Banda): 7000 Hz.
+  - Factor de calitate ($Q$): 0.707.
+  - Rezistență de intrare minimă: 750 Ω.
 
-### 3. Amplificator cu Câștig Programabil (PGA)
-* [cite_start]**Funcție:** Ajustarea discretă a amplificării în 4 pași[cite: 20, 21].
-* [cite_start]**Implementare:** Realizat cu un comutator analogic multiplu (ADG1311) și o rețea rezistivă de precizie[cite: 20, 22].
-* [cite_start]**Trepte de câștig:** 12 dB, 14 dB, 16 dB și 18 dB (rezoluție de 2 dB/pas)[cite: 21, 24].
+### 3. Amplificator cu Câștig Programabil - PGA (Etajul 3)
+- **Funcție:** Ajustarea nivelului semnalului în trepte discrete.
+- **Trepte de câștig:**
+  - Pas 1 (Maxim): 18 dB (8 liniar).
+  - Pas 2: 16 dB (6.3 liniar).
+  - Pas 3: 14 dB (5 liniar).
+  - Pas 4 (Minim): 12 dB (4 liniar).
+- **Implementare:** Control prin comutatoare analogice (U5, U6, U7).
 
-### 4. Redresor de Precizie
-* [cite_start]**Tip:** Redresor monoalternanță de precizie[cite: 27].
-* [cite_start]**Tehnologie:** Utilizează diode de comutație rapidă 1N4148 montate în bucla de reacție pentru a compensa căderea de tensiune de prag (0.6V)[cite: 28, 34].
-* [cite_start]**Rezultat:** Extrage informația de amplitudine (doar componenta pozitivă) cu un câștig liniar unitar[cite: 29, 30].
+### 4. Detector de Vârf / Redresor (Etajul 4)
+- **Tip:** Redresor de precizie monoalternanță.
+- **Rol:** Extragerea anvelopei semnalului procesat pentru monitorizare sau conversie ulterioară.
 
-## 🛠️ Instrumente Utilizate
-* [cite_start]**LTspice:** Pentru simulările de regim static (DCOP), analiza în frecvență (AC) și analiza în regim tranzitoriu (Transient)[cite: 6, 37, 39].
-* [cite_start]**Microsoft Excel:** Pentru dimensionarea componentelor și calculul rețelelor rezistive[cite: 16, 19].
-
-## 📊 Rezultate Obținute
-* [cite_start]**Liniaritate:** Distorsiuni armonice totale (THD) sub 1% pentru toate treptele de câștig[cite: 43].
-* [cite_start]**CMRR:** Aproximativ 100 dB la frecvența de 1 MHz[cite: 37].
-* [cite_start]**PSRR:** Aproximativ 11.72 dB[cite: 38].
+## 📊 Performanțe și Simulări
+- **Analiza Transient:** Verificarea liniarității (THD < 1%) pentru extremele de câștig și intrare.
+- **Analiza AC:** Confirmarea benzii de trecere a filtrului și a pașilor de câștig ai PGA-ului.
+- **Componente utilizate:** LT1679 (Op-Amp), ADG1311 (Analog Switch), 1N4148 (Diode).
 
 ---
-**Autor:** Beres Dan-Cristian  
-**Grupa:** 2133/3  
-**Coordonator:** prof. ing. [cite_start]Alessandro Battigelli
+**Autor:** Beres Dan-Cristian
+**Grupa:** 2133/3
+**Coordonator:** prof. ing. Alessandro Battigelli
+**Instituție:** Universitatea Tehnică din Cluj-Napoca (ETTI)
